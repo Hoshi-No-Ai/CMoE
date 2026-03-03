@@ -80,8 +80,8 @@ const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
         <div class="flex justify-center items-center gap-8 -mt-10">
           {/* Logo 1: 复旦大学 */}
           <Image src={fudanLogo} alt="Fudan University" class="h-14 w-auto object-contain dark:brightness-110"/>
-          {/* Logo 2: TARS */}
-          <Image src={tarsLogo} alt="TARS" class="h-14 w-auto object-contain dark:brightness-110"/>
+          <!-- {/* Logo 2: TARS */}
+          <Image src={tarsLogo} alt="TARS" class="h-14 w-auto object-contain dark:brightness-110"/> -->
         </div>
         {links && <Links links={links} />}
       </div>
@@ -89,6 +89,14 @@ const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
     <main>
       <Content components={{ table: Table }} />
     </main>
+    <footer class="mx-auto max-w-[64rem] px-6 text-center">
+      <p class="prose-sm text-center">
+        Page template borrowed from <a
+          href="https://hoshi-no-ai.github.io/Rhythm/"
+          rel="nofollow">Rhythm</a
+        >
+      </p>
+    </footer>
     <footer class="mx-auto max-w-[64rem] px-6 text-center">
       <p class="prose-sm text-center">
         Built with <a

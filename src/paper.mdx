@@ -1,49 +1,38 @@
 ---
-title: "Rhythm: Learning Interactive Whole-Body Control for Dual Humanoids"
+title: "CMoE: Contrastive Mixture of Experts for Motion Control and Terrain Adaptation of Humanoid Robots"
 authors:
-  - name: Hongjin Chen
-    institution: [Fudan University, TARS]
-    notes: ["*"]
-  - name: Wei Zhang
-    institution: [TARS]
-    notes: ["*"]
-  - name: Pengfei Li
-    institution: [TARS, Tsinghua University]
-    notes: ["†"]
   - name: Shihao Ma
-    institution: [Fudan University, TARS]
-  - name: Ke Ma
-    institution: [Fudan University, TARS]
-  - name: Yujie Jin
-    institution: TARS
+    institution: [Fudan University]
+    # notes: ["*"]
+  - name: Hongjin Chen
+    institution: [Fudan University]
+    # notes: ["*"]
   - name: Zijun Xu
-    institution: [Fudan University, Shanghai Innovation Institute]
-  - name: Xiaohui Wang
-    institution: [Fudan University, TARS]
-  - name: Yupeng Zheng
-    institution: Institute of Automation, Chinese Academy of Sciences
-  - name: Zining Wang
-    institution: TARS
-  - name: Jieru Zhao
-    institution: Shanghai Jiao Tong University
-  - name: Yilun Chen
-    institution: TARS
+    institution: [Fudan University]
+    # notes: ["*"]
+  - name: Yi Zhao
+    institution: [Fudan University]
+  - name: Ke Wu
+    institution: [Fudan University]
+  - name: Ruichen Yang
+    institution: [Fudan University]
+  - name: Leyao Zou
+    institution: [Fudan University]
+  - name: Zhongxue Gan
+    institution: [Fudan University]
+    notes: ["†"]
   - name: Wenchao Ding
-    institution: [Fudan University, TARS]
+    institution: [Fudan University]
     notes: ["†"]
 # conference: Conference Name
 notes:
-  - symbol: "*"
-    text: Equal contribution
+  # - symbol: "*"
+  #   text: Equal contribution
   - symbol: †
     text: Corresponding Authors
 ordered_institutions:
   - "Fudan University"
-  - "TARS"
-  - "Tsinghua University"
-  - "Shanghai Jiao Tong University"
-  - "Shanghai Innovation Institute"
-  - "Institute of Automation, Chinese Academy of Sciences"
+  # - "TARS"
 links:
   - name: Paper
     # url: https://github.com/RomanHauksson/academic-project-astro-template
@@ -55,11 +44,8 @@ links:
     url: https://youtu.be/aq5mVu8MB0s
     icon: ri:video-line
   - name: Code (Coming Soon)
-    url: https://github.com/Hoshi-No-Ai/holosoma
+    url: https://github.com/Fudan-MAGIC-Lab/CMoE
     icon: ri:github-line
-  - name: Dataset (Coming Soon)
-    # url: https://github.com/Hoshi-No-Ai/holosoma
-    icon: ri:database-2-line
   # - name: Slides
   #   url: https://github.com/RomanHauksson/academic-project-astro-template
   #   icon: ri:slideshow-2-line
@@ -99,8 +85,8 @@ import greeting2_robust from "./assets/2/greeting_robust.mp4"
 import hug_v1_robust from "./assets/2/hug_robust_v1.mp4"
 import hug_v2_robust from "./assets/2/hug_robust_v2.mp4"
 
-import teaserImage from "@/assets/teaser.png"
-import frameworkImage from "@/assets/framework.png"
+import teaserImage from "@/assets/teaser.jpg"
+import frameworkImage from "@/assets/pipeline.jpg"
 
 <h2 class="text-center">Overview</h2>
 
@@ -114,7 +100,7 @@ import frameworkImage from "@/assets/framework.png"
   <Picture slot="figure" src={teaserImage} alt="Rhythm teaser" />
 </Figure>
 
-Realizing interactive whole-body control for multi-humanoid systems is critical for unlocking complex collaborative capabilities in shared environments. Although recent advancements have significantly enhanced the agility of individual robots, bridging the gap to physically coupled multi-humanoid interaction remains challenging, primarily due to severe kinematic mismatches and complex contact dynamics. To address this, we introduce Rhythm, the first unified framework enabling real-world deployment of dual-humanoid systems for complex, physically plausible interactions. Our framework integrates three core components: (1) an Interaction-Aware Motion Retargeting (IAMR) module that generates feasible humanoid interaction references from human data; (2) an Interaction-Guided Reinforcement Learning (IGRL) policy that masters coupled dynamics via graph-based rewards; and (3) a real-world deployment system that enables robust transfer of dual-humanoid interaction. Extensive experiments on physical Unitree G1 robots demonstrate that our framework achieves robust interactive whole-body control, successfully transferring diverse behaviors such as hugging and dancing from simulation to reality.
+For effective deployment in real-world environments, humanoid robots must autonomously navigate a diverse range of complex terrains with abrupt transitions. While the Vanilla mixture of experts (MoE) framework is theoretically capable of modeling diverse terrain features, in practice, the gating network exhibits nearly uniform expert activations across different terrains, weakening the expert specialization and limiting the model's expressive power. To address this limitation, we introduce CMoE, a novel single-stage reinforcement learning framework that integrates contrastive learning to refine expert activation distributions. By imposing contrastive constraints, CMoE maximizes the consistency of expert activations within the same terrain while minimizing their similarity across different terrains, thereby encouraging experts to specialize in distinct terrain types. We validated our approach on the Unitree G1 humanoid robot through a series of challenging experiments. Results demonstrate that CMoE enables the robot to traverse continuous steps up to 20 cm high and gaps up to 80 cm wide, while achieving robust and natural gait across diverse mixed terrains, surpassing the limits of existing methods. To support further research and foster community development, we will release our code publicly.
 
 </HighlightedSection>
 
@@ -204,10 +190,9 @@ Realizing interactive whole-body control for multi-humanoid systems is critical 
 </Figure>
 
 Our main contributions are summarized as follows:
-- **Rhythm Framework:** We propose the first unified framework for whole-body dual-humanoid interaction that achieves the first successful robust transfer of complex interactive behaviors to physical hardware.
-- **IAMR & MAGIC Dataset:** We develop **IAMR** (Interaction-Aware Motion Retargeting) to resolve kinematic conflicts and release **MAGIC** (Multi-Humanoid Geometric Interaction Dataset), offering paired raw and retargeted interaction data.
-- **IGRL Policy:** We introduce **IGRL** (Interaction-Guided Reinforcement Learning), a multi-agent learning module that masters coupled interaction dynamics via graph-based rewards, enabling agents to learn robust and physically consistent behaviors.
-- **Extensive Validation:** We conduct extensive experiments on **Unitree G1** humanoids. Quantitative and qualitative evaluations across diverse interaction tasks in both simulation and the real world demonstrate the superior performance and robustness of our framework.
+- We propose a single-stage, end-to-end framework that directly maps multimodal sensory inputs to robot actions, integrating estimators to process both historical information and terrain-specific data.
+- We introduce a novel MoE actor-critic model, augmented with a contrastive learning objective to enhance the robot’s ability to adapt its terrain response strategy across complex, heterogeneous surfaces. 
+- Extensive experiments conducted on the Unitree-G1 robot demonstrate our approach's state-of-the-art performance, and we release our code to further contribute to the research community.
 
 {/* ## BibTeX citation
 
