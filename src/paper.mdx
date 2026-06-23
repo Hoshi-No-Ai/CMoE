@@ -3,13 +3,13 @@ title: "CMoE: Contrastive Mixture of Experts for Motion Control and Terrain Adap
 authors:
   - name: Shihao Ma
     institution: [Fudan University]
-    # notes: ["*"]
+    notes: ["*"]
   - name: Hongjin Chen
     institution: [Fudan University]
-    # notes: ["*"]
+    notes: ["*"]
   - name: Zijun Xu
     institution: [Fudan University]
-    # notes: ["*"]
+    notes: ["*"]
   - name: Yi Zhao
     institution: [Fudan University]
   - name: Ke Wu
@@ -24,10 +24,10 @@ authors:
   - name: Wenchao Ding
     institution: [Fudan University]
     notes: ["†"]
-# conference: Conference Name
+conference: Accepted to ICRA 2026
 notes:
-  # - symbol: "*"
-  #   text: Equal contribution
+  - symbol: "*"
+    text: Equal contribution
   - symbol: †
     text: Corresponding Authors
 ordered_institutions:
@@ -97,7 +97,7 @@ import frameworkImage from "@/assets/pipeline.jpg"
 <h2 class="text-center">Abstract</h2>
 
 <Figure>
-  <Picture slot="figure" src={teaserImage} alt="Rhythm teaser" />
+  <Picture slot="figure" src={teaserImage} alt="CMoE teaser" />
 </Figure>
 
 For effective deployment in real-world environments, humanoid robots must autonomously navigate a diverse range of complex terrains with abrupt transitions. While the Vanilla mixture of experts (MoE) framework is theoretically capable of modeling diverse terrain features, in practice, the gating network exhibits nearly uniform expert activations across different terrains, weakening the expert specialization and limiting the model's expressive power. To address this limitation, we introduce CMoE, a novel single-stage reinforcement learning framework that integrates contrastive learning to refine expert activation distributions. By imposing contrastive constraints, CMoE maximizes the consistency of expert activations within the same terrain while minimizing their similarity across different terrains, thereby encouraging experts to specialize in distinct terrain types. We validated our approach on the Unitree G1 humanoid robot through a series of challenging experiments. Results demonstrate that CMoE enables the robot to traverse continuous steps up to 20 cm high and gaps up to 80 cm wide, while achieving robust and natural gait across diverse mixed terrains, surpassing the limits of existing methods. To support further research and foster community development, we will release our code publicly.
@@ -183,7 +183,7 @@ For effective deployment in real-world environments, humanoid robots must autono
 <h2 class="text-center">Framework</h2>
 
 <Figure>
-  <Picture slot="figure" src={frameworkImage} alt="Rhythm framework" />
+  <Picture slot="figure" src={frameworkImage} alt="CMoE framework" />
 </Figure>
 
 Our main contributions are summarized as follows:
@@ -196,11 +196,12 @@ Our main contributions are summarized as follows:
 If you find our work useful, please consider citing our paper:
 
 ```bibtex
-@article{ma2026cmoe,
+@inproceedings{ma2026cmoe,
   title={CMoE: Contrastive Mixture of Experts for Motion Control and Terrain Adaptation of Humanoid Robots},
   author={Shihao Ma and Hongjin Chen and Zijun Xu and Yi Zhao and Ke Wu and Ruichen Yang and Leyao Zou and Zhongxue Gan and Wenchao Ding},
-  journal={arXiv preprint arXiv:2603.03067},
+  booktitle={2026 IEEE International Conference on Robotics and Automation (ICRA)},
   year={2026},
+  organization={IEEE},
   url={https://arxiv.org/abs/2603.03067}
 }
 ```
