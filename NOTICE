@@ -1,0 +1,25 @@
+CMoE: Contrastive Mixture of Experts for Motion Control and Terrain
+Adaptation of Humanoid Robots
+Copyright (c) 2026 The CMoE Authors (Fudan University)
+
+This product includes software developed by third parties, listed below.
+Each component retains its own copyright and license; see the corresponding
+LICENSE files in this repository.
+
+1. legged_gym (https://github.com/leggedrobotics/legged_gym)
+   Copyright (c) 2021 ETH Zurich, Nikita Rudin
+   Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES
+   License: BSD-3-Clause (see legged_gym/LICENSE)
+   The contents of legged_gym/ are derived from this project, with
+   CMoE-specific modifications (humanoid environment, terrain, CMoE training).
+
+2. rsl_rl (https://github.com/leggedrobotics/rsl_rl)
+   Copyright (c) 2021 ETH Zurich, Nikita Rudin
+   Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES
+   License: BSD-3-Clause (see rsl_rl/LICENSE)
+   The contents of rsl_rl/ are derived from this project, with CMoE-specific
+   modules (CMoE actor-critic, estimators, contrastive objective).
+
+3. HIMLoco / Hybrid Internal Model (https://github.com/OpenRobotLab/HIMLoco)
+   The estimator/actor-critic lineage of this codebase was originally forked
+   from the HIMLoco project.

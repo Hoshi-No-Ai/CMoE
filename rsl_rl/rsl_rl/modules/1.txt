@@ -1,0 +1,183 @@
+已知有一个类，他的act等等方法会被一个ppo代码调用，
+class HIMActorCritic(nn.Module):
+    is_recurrent = False
+    def __init__(self,  num_actor_obs,
+                        num_critic_obs,
+                        num_one_step_obs,
+                        num_actions,
+                        actor_hidden_dims=[512, 256, 128],
+                        critic_hidden_dims=[512, 256, 128],
+                        activation='elu',
+                        init_noise_std=1.0,
+                        **kwargs):
+        estimator_name = kwargs.pop("estimator_class", "HIMEstimator")
+        estimator_class = eval(estimator_name)
+
+        self.with_explicit_input = kwargs.pop("with_explicit_input", True)
+        self.with_latent_input = kwargs.pop("with_latent_input", True)
+        use_estimation_loss = kwargs.pop("use_estimation_loss", True)
+        use_latent_loss = kwargs.pop("use_latent_loss", True)
+        use_detailed_explicit = kwargs.pop("use_detailed_explicit", True)
+        if kwargs:  # 剩下的就是未处理的键
+            print("ActorCritic.__init__ got unexpected arguments, which will be ignored: " + str(list(kwargs.keys())))
+
+        super(HIMActorCritic, self).__init__()
+
+        activation = get_activation(activation)
+
+        self.history_size = int(num_actor_obs/num_one_step_obs)
+        self.num_actor_obs = num_actor_obs
+        self.num_actions = num_actions
+        self.num_one_step_obs = num_one_step_obs
+
+        mlp_input_dim_a = num_one_step_obs
+        if self.with_explicit_input == True:
+            if use_detailed_explicit == True:
+                mlp_input_dim_a += 3 + 1 + 12
+            else:
+                mlp_input_dim_a += 3
+        if self.with_latent_input == True:
+            mlp_input_dim_a += 16
+        mlp_input_dim_a += 77
+        mlp_input_dim_c = num_critic_obs
+
+        # Estimator
+        self.estimator = estimator_class(temporal_steps=self.history_size, num_one_step_obs=num_one_step_obs, 
+                                      use_estimation_loss = use_estimation_loss, use_latent_loss = use_latent_loss,
+                                      use_detailed_explicit = use_detailed_explicit)
+
+        # Policy
+        actor_layers = []
+        actor_layers.append(nn.Linear(mlp_input_dim_a, actor_hidden_dims[0]))
+        actor_layers.append(activation)
+        for l in range(len(actor_hidden_dims)):
+            if l == len(actor_hidden_dims) - 1:
+                actor_layers.append(nn.Linear(actor_hidden_dims[l], num_actions))
+                # actor_layers.append(nn.Tanh())
+            else:
+                actor_layers.append(nn.Linear(actor_hidden_dims[l], actor_hidden_dims[l + 1]))
+                actor_layers.append(activation)
+        self.actor = nn.Sequential(*actor_layers)
+
+        # Value function
+        critic_layers = []
+        critic_layers.append(nn.Linear(mlp_input_dim_c, critic_hidden_dims[0]))
+        critic_layers.append(activation)
+        for l in range(len(critic_hidden_dims)):
+            if l == len(critic_hidden_dims) - 1:
+                critic_layers.append(nn.Linear(critic_hidden_dims[l], 1))
+            else:
+                critic_layers.append(nn.Linear(critic_hidden_dims[l], critic_hidden_dims[l + 1]))
+                critic_layers.append(activation)
+        self.critic = nn.Sequential(*critic_layers)
+
+        print(f"Actor MLP: {self.actor}")
+        print(f"Critic MLP: {self.critic}")
+
+        # Action noise
+        self.std = nn.Parameter(init_noise_std * torch.ones(num_actions))
+        self.distribution = None
+        # disable args validation for speedup
+        Normal.set_default_validate_args = False
+        
+        # seems that we get better performance without init
+        # self.init_memory_weights(self.memory_a, 0.001, 0.)
+        # self.init_memory_weights(self.memory_c, 0.001, 0.)
+
+    @staticmethod
+    # not used at the moment
+    def init_weights(sequential, scales):
+        [torch.nn.init.orthogonal_(module.weight, gain=scales[idx]) for idx, module in
+         enumerate(mod for mod in sequential if isinstance(mod, nn.Linear))]
+
+
+    def reset(self, dones=None):
+        pass
+
+    def forward(self):
+        raise NotImplementedError
+    
+    @property
+    def action_mean(self):
+        return self.distribution.mean
+
+    @property
+    def action_std(self):
+        return self.distribution.stddev
+    
+    @property
+    def entropy(self):
+        return self.distribution.entropy().sum(dim=-1)
+
+    def act(self, obs_history=None, **kwargs):
+        with torch.no_grad():
+            explicit, latent = self.estimator(obs_history)
+        actor_input = obs_history[:,:self.num_one_step_obs]
+        if self.with_explicit_input == True:
+            actor_input = torch.cat((actor_input, explicit), dim=-1)
+        if self.with_latent_input == True:
+            actor_input = torch.cat((actor_input, latent), dim=-1)
+        actor_input = torch.cat((actor_input, obs_history[:,-77:]), dim=-1)
+        mean = self.actor(actor_input)
+        self.distribution = Normal(mean, mean*0. + self.std)
+        return mean,self.std
+    
+    def get_actions_log_prob(self, actions):
+        return self.distribution.log_prob(actions).sum(dim=-1)
+
+    def act_inference(self, obs_history, observations=None):
+        explicit, latent = self.estimator(obs_history)#3,16
+        actor_input = obs_history[:,:self.num_one_step_obs]
+        if self.with_explicit_input == True:
+            actor_input = torch.cat((actor_input, explicit), dim=-1)
+        if self.with_latent_input == True:
+            actor_input = torch.cat((actor_input, latent), dim=-1)
+        actor_input = torch.cat((actor_input, obs_history[:,-77:]), dim=-1)
+        actions_mean = self.actor(actor_input)
+        return actions_mean
+
+    def evaluate(self, critic_observations, **kwargs):
+        value = self.critic(critic_observations)
+        return value
+
+帮我修改以下代码，实现：1.这个新的类MoEActorCritic的对外接口等等仍然可以接入原来的ppo代码  2.原来的代码是ppo-HIMActorCritic，现在变成ppo-MoEActorCritic-HIMActorCritic
+其中MoEActorCritic要实现，实例化两个HIMActorCritic类，并把他们的输出取平均值输出给ppo代码
+class MoEActorCritic(nn.Module):
+    def __init__
+
+    def create_expert_network(self, num_actor_obs, num_critic_obs, num_one_step_obs, num_actions, expert_hidden_dims, activation, **kwargs):
+        # 使用 HIMActorCritic 为每个专家网络创建结构
+        return HIMActorCritic(num_actor_obs=num_actor_obs,
+                              num_critic_obs=num_critic_obs,
+                              num_one_step_obs=num_one_step_obs,
+                              num_actions=num_actions,
+                              actor_hidden_dims=expert_hidden_dims,
+                              critic_hidden_dims=expert_hidden_dims,
+                              activation=activation,
+                              **kwargs)
+
+
+    def act(self, obs_history=None, **kwargs):
+
+
+        
+    def get_actions_log_prob(self, actions):
+        # 计算动作的 log 概率
+        return self.distribution.log_prob(actions).sum(dim=-1)
+
+    def evaluate(self, critic_observations, **kwargs):
+        value = self.experts[0].critic(critic_observations)  # 只使用第一个专家的评论家网络来评估
+        return value
+
+
+
+
+
+
+
+
+
+
+
+
+运行顺序：moe_on_policy_runner-double_net-HIMActorCritic-him ppo
