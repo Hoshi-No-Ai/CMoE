@@ -91,9 +91,9 @@ class CMoEActorCritic(nn.Module):
                               **kwargs)
     
     
-    def update_estimators(self, obs_batch, next_critic_obs_batch, lr):
+    def update_estimators(self, obs_batch, critic_obs_batch, next_critic_obs_batch, lr):
     
-        estimation_loss, latent_loss, recons_loss, kld_loss = self.state_estimator.update(obs_batch, next_critic_obs_batch, lr)
+        estimation_loss, latent_loss, recons_loss, kld_loss = self.state_estimator.update(obs_batch, critic_obs_batch, next_critic_obs_batch, lr)
         estimation_loss2, latent_loss2, recons_loss2, kld_loss2 = self.terrain_estimator.update(obs_batch, next_critic_obs_batch, lr)
         return estimation_loss, latent_loss, recons_loss, kld_loss, estimation_loss2, latent_loss2, recons_loss2, kld_loss2
 

@@ -2,14 +2,15 @@
 
 [![Project Page](https://img.shields.io/badge/Project-Page-brightgreen.svg)](https://hoshi-no-ai.github.io/CMoE/)
 [![arXiv](https://img.shields.io/badge/arXiv-2603.03067-b31b1b.svg)](https://arxiv.org/abs/2603.03067)
+[![ICRA 2026](https://img.shields.io/badge/ICRA-2026-blue.svg)](https://hoshi-no-ai.github.io/CMoE/)
 [![Video](https://img.shields.io/badge/Video-YouTube-red.svg)](https://youtu.be/Q95Ssg1FP7A)
 [![License](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE)
 
-Official implementation of **CMoE: Contrastive Mixture of Experts for Motion Control and Terrain Adaptation of Humanoid Robots**.
+Official implementation of **CMoE: Contrastive Mixture of Experts for Motion Control and Terrain Adaptation of Humanoid Robots**, accepted to **ICRA 2026**.
 
-Shihao Ma, Hongjin Chen, Zijun Xu, Yi Zhao, Ke Wu, Ruichen Yang, Leyao Zou, Zhongxue Gan†, Wenchao Ding†
+Shihao Ma<sup>&#42;</sup>, Hongjin Chen<sup>&#42;</sup>, Zijun Xu<sup>&#42;</sup>, Yi Zhao, Ke Wu, Ruichen Yang, Leyao Zou, Zhongxue Gan<sup>†</sup>, Wenchao Ding<sup>†</sup>
 
-Fudan University &nbsp;&nbsp;(† Corresponding Authors)
+Fudan University &nbsp;&nbsp;(<sup>&#42;</sup> Equal Contribution, <sup>†</sup> Corresponding Authors)
 
 [Project Page](https://hoshi-no-ai.github.io/CMoE/) &nbsp;|&nbsp; [Paper](https://arxiv.org/abs/2603.03067) &nbsp;|&nbsp; [arXiv](https://arxiv.org/abs/2603.03067) &nbsp;|&nbsp; [Video](https://youtu.be/Q95Ssg1FP7A)
 

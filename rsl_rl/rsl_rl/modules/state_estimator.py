@@ -107,13 +107,13 @@ class StateEstimator(nn.Module):
         eps = torch.rand_like(std)
         return eps * std + mu
 
-    def update(self, obs_history, next_critic_obs, lr=None):
+    def update(self, obs_history, critic_obs, next_critic_obs, lr=None):
         if lr is not None:
             self.learning_rate = lr
             for param_group in self.optimizer.param_groups:
                 param_group['lr'] = self.learning_rate
                 
-        explicit=next_critic_obs[:, 45:45+3].detach()
+        explicit = critic_obs[:, 45:45+3].detach()
         next_obs = next_critic_obs.detach()[:, 3:self.num_one_step_obs+3]
 
         pred_explicit, z, mu, log_var = self.encode(obs_history)

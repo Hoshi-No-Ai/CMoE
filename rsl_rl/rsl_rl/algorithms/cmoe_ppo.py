@@ -132,7 +132,7 @@ class CMoEPPO:
                             param_group['lr'] = self.learning_rate
 
                 # Estimator update
-                estimation_loss, latent_loss, recons_loss, kld_loss, estimation_loss2, latent_loss2, recons_loss2, kld_loss2 = self.actor_critic.update_estimators(obs_batch, next_critic_obs_batch, lr=self.learning_rate)
+                estimation_loss, latent_loss, recons_loss, kld_loss, estimation_loss2, latent_loss2, recons_loss2, kld_loss2 = self.actor_critic.update_estimators(obs_batch, critic_obs_batch, next_critic_obs_batch, lr=self.learning_rate)
                 
                 contrastive_loss = self.actor_critic.compute_contrastive_loss(obs_batch)
 
