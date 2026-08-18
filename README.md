@@ -118,9 +118,21 @@ Visualize and export the latest trained policy:
 python legged_gym/legged_gym/scripts/play.py --task=g1cmoe --alg=cmoe
 ```
 
-## Roadmap
+## Deployment References
 
-This initial release focuses on the simulation training code. Deployment (MuJoCo and real-robot) and pre-trained checkpoints are planned for a future release — see [TODO.md](TODO.md).
+This repository focuses on the simulation training code for CMoE.
+
+For users building a similar deployment pipeline, the following projects may be
+helpful:
+
+- For elevation mapping, see
+  [elevation_mapping_humanoid](https://github.com/smoggy-P/elevation_mapping_humanoid).
+- For simulation and real-robot deployment on the Unitree G1, see
+  [rl_sar](https://github.com/fan-ziqi/rl_sar). Our real-robot deployment was
+  built on top of this framework.
+
+Integrating CMoE with these frameworks requires adapting the observations,
+actions, joint order, and control frequency.
 
 ## Citation
 
